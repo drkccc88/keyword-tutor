@@ -1,8 +1,11 @@
 import { SingleQuiz } from '@/lib/models';
 import { useEffect, useState } from 'react';
 
-export function useSingleQuiz(): [SingleQuiz[], (refetch: boolean) => void] {
-    const [val, setVal] = useState<SingleQuiz[]>([]);
+export function useSingleQuiz(): [
+    SingleQuiz[] | undefined,
+    (refetch: boolean) => void,
+] {
+    const [val, setVal] = useState<SingleQuiz[]>();
     const [refetch, setRefetch] = useState(true);
     useEffect(() => {
         async function fetchOrGenerate() {
@@ -11,10 +14,8 @@ export function useSingleQuiz(): [SingleQuiz[], (refetch: boolean) => void] {
             });
             if (fetchResponse.ok) {
                 const data = await fetchResponse.json();
-                if (data.data.length) {
-                    setVal(data.data);
-                    return;
-                }
+                setVal(data.data);
+                return;
             }
         }
         if (refetch) {

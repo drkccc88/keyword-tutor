@@ -205,7 +205,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         </Toolbar>
     );
 }
-export function EnhancedTable() {
+export function HistoryTable() {
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('createDate');
     const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -242,6 +242,9 @@ export function EnhancedTable() {
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
         if (event.target.checked) {
+            if (!rows) {
+                return;
+            }
             const newSelected = rows.map((n) => n.keyword);
             setSelected(newSelected);
             return;
@@ -281,7 +284,9 @@ export function EnhancedTable() {
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+        page > 0
+            ? Math.max(0, (1 + page) * rowsPerPage - (rows?.length ?? 0))
+            : 0;
 
     const visibleRows = React.useMemo(
         () =>
@@ -291,8 +296,7 @@ export function EnhancedTable() {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
         [order, orderBy, page, rowsPerPage, rows],
     );
-
-    if (!visibleRows) {
+    if (!rows) {
         return <Loading />;
     }
 
@@ -315,7 +319,7 @@ export function EnhancedTable() {
                             rowCount={rows.length}
                         />
                         <TableBody>
-                            {visibleRows.map((row, index) => {
+                            {visibleRows?.map((row, index) => {
                                 const isItemSelected = selected.includes(
                                     row.keyword,
                                 );

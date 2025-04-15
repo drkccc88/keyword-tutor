@@ -6,6 +6,28 @@ type QuizData = {
 };
 
 export function parseQuizText(text: string): QuizData[] {
+    /*
+    input:
+    -----------
+    <pr>問題1:hogehoge</pr>
+    <ch>1.a</ch>
+    <ch>2.a</ch>
+    <ch>3.a</ch>
+    <ch>4.a</ch>
+
+    <pr>問題2:hugahuga</pr>
+    <ch>1.b</ch>
+    <ch>2.b</ch>
+    <ch>3.b</ch>
+    <ch>4.b</ch>
+    -----------
+
+    output:
+    [
+        {pr: "問題1:hogehoge", quiz: ["1.a", "2.a", "3.a", "4.a"]},
+        {pr: "問題2:hugahuga", quiz: ["1.b", "2.b", "3.b", "4.b"]},
+    ]
+    */
     const sections = text.split(/(?=<pr>|<ch>)/).filter(Boolean);
 
     const result: QuizData[] = [];
@@ -14,20 +36,18 @@ export function parseQuizText(text: string): QuizData[] {
 
     sections.forEach((section) => {
         if (section.startsWith('<pr>')) {
-            // 現在の質問とその選択肢を一緒に保存
+            // １つ前に設定したprとansをresultに追加
             if (currentPr) {
                 result.push({ pr: currentPr, quiz: currentAns });
             }
-            // <pr>タグの内容を取得
             currentPr = section.replace(/<\/?pr>/g, '').trim();
             currentAns = [];
         } else if (section.startsWith('<ch>')) {
-            // <ch>タグの内容を現在の選択肢リストに追加
             currentAns.push(section.replace(/<\/?ch>/g, '').trim());
         }
     });
 
-    // 最後の<pr>タグとその選択肢を忘れずに追加
+    // 最後に設定したprとansをresultに追加
     if (currentPr) {
         result.push({ pr: currentPr, quiz: currentAns });
     }

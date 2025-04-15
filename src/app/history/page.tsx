@@ -1,7 +1,7 @@
 'use client';
 
-import { EnhancedTable } from '@/conponents/historyTable';
+import { HistoryTable } from '@/conponents/historyTable';
 
 export default function History() {
-    return <EnhancedTable />;
+    return <HistoryTable />;
 }
