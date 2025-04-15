@@ -20,7 +20,7 @@
 環境変数の設定
 ```
 # .env.local
-OPENAI_AP_KEY=‘your_key’ # OpenAIのapi-key
+OPENAI_API_KEY=‘your_key’ # OpenAIのapi-key
 DATABASE_URL=‘your_url’ # MongoDBの接続URL
 ```
 
