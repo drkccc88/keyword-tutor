@@ -26,6 +26,9 @@ DATABASE_URL=‘your_url’ # MongoDBの接続URL
 
 ローカル環境で実行
 ```
+# pnpmをインストール
+npm install -g pnpm
+
 # 必要なライブラリをインストール
 pnpm install
 
